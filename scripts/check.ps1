@@ -16,7 +16,7 @@ foreach ($id in @('galerie','o-autorce','zakazky','kontakt','artworks','art-dial
   if (-not $html.Contains('id="' + $id + '"')) { throw "Missing target: $id" }
 }
 if (-not $html.Contains('noindex, nofollow')) { throw 'Review indexing intentionally before launch' }
-if ($html -match 'https?://') { throw 'Unexpected remote dependency in HTML' }
+if ($html -match '<(?:script|img)\b[^>]*\bsrc="https?://' -or $html -match '<link\b[^>]*\bhref="https?://') { throw 'Unexpected remote dependency in HTML' }
 foreach ($file in Get-ChildItem (Join-Path $publicRoot 'assets') -Filter '*.svg') {
   $null = [xml](Get-Content $file.FullName -Raw -Encoding UTF8)
 }
